@@ -1,8 +1,17 @@
 #!/bin/sh
 NAME='wordpress'
+PROXY_MANAGER='nginx-proxy-manager'
 PMA_PORT='9002'
 
 [ ! "${1}" = '' ] && NAME="${1}"
+[ ! "${2}" = '' ] && PROXY_MANAGER="${2}"
+
+if ! docker ps -a | awk '{print $NF}' | grep "^${PROXY_MANAGER}$" > /dev/null 2>&1; then
+	echo "Container ${PROXY_MANAGER} not exists"
+	echo -n 'Continue? (y/N) '
+	read answer
+	[ "${answer}" = 'y' ] || exit 1
+fi
 
 salts="$(wget -O- 'https://api.wordpress.org/secret-key/1.1/salt/')" || exit 1
 salts="$(echo "${salts}" | sed -e "s/.*'\(.*\)'.*/\1/")"
@@ -57,7 +66,7 @@ docker run -d \
 	--restart unless-stopped \
 	phpmyadmin/phpmyadmin:latest
 
-docker network connect ${NAME} nginx-proxy-manager
-docker restart nginx-proxy-manager
+docker network connect ${NAME} ${PROXY_MANAGER}
+docker ps | awk '{print $NF}' | grep "^${PROXY_MANAGER}$" > /dev/null 2>&1 && docker restart ${PROXY_MANAGER}
 
 exit 0
