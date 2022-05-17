@@ -1,8 +1,16 @@
 #!/bin/sh
 NAME='joomla'
+PROXY_MANAGER='nginx-proxy-manager'
 PMA_PORT='9003'
 
 [ ! "${1}" = '' ] && NAME="${1}"
+[ ! "${2}" = '' ] && PROXY_MANAGER="${2}"
+er ps -a | awk '{print $NF}' | grep "^${PROXY_MANAGER}$" > /dev/null 2>&1
+	echo "Container ${PROXY_MANAGER} not exists"
+	echo 'Continue? (y/N) '
+	read answer
+	[ "${answer}" = 'y' ] || exit 1
+fi
 
 docker network create --driver bridge ${NAME}
 
@@ -46,7 +54,7 @@ docker run -d \
 	--restart unless-stopped \
 	redis
 
-docker network connect ${NAME} nginx-proxy-manager
-docker restart nginx-proxy-manager
+docker network connect ${NAME} ${PROXY_MANAGER}
+docker ps | awk '{print $NF}' | grep "^${PROXY_MANAGER}$" > /dev/null 2>&1 && docker restart ${PROXY_MANAGER}
 
 exit 0

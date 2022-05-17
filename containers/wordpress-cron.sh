@@ -4,6 +4,13 @@ NAME='wordpress'
 
 [ ! "${1}" = '' ] && NAME="${1}"
 
+if ! docker ps -a | awk '{print $NF}' | grep "^${NAME}$" > /dev/null 2>&1; then
+	echo "Container ${NAME} not exists"
+	echo -n 'Continue? (y/N} '
+	read answer
+	[ "${answer}" = 'y' ] || exit 1
+fi
+
 if [ "${2}" = 'debug' ]; then
 	docker run -d \
 		--name=${NAME}-cron \
