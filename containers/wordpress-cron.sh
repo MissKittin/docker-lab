@@ -1,5 +1,4 @@
 #!/bin/sh
-
 NAME='wordpress'
 
 [ ! "${1}" = '' ] && NAME="${1}"

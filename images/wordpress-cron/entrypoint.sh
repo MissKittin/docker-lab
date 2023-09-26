@@ -31,4 +31,3 @@ if [ "${CRON_DEBUG}" = '1' ]; then
 fi
 
 exec crond -f -c /etc/cron.d -L /dev/null
-

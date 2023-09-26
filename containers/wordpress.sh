@@ -1,7 +1,6 @@
 #!/bin/sh
 NAME='wordpress'
 PROXY_MANAGER='nginx-proxy-manager'
-PMA_PORT='9002'
 
 [ ! "${1}" = '' ] && NAME="${1}"
 [ ! "${2}" = '' ] && PROXY_MANAGER="${2}"
@@ -57,14 +56,6 @@ docker run -d \
 	-e WORDPRESS_NONCE_SALT="${NONCE_SALT}" \
 	--restart unless-stopped \
 	wordpress:latest
-
-docker run -d \
-	--name=${NAME}-pma \
-	--network ${NAME} \
-	-p 127.0.0.1:${PMA_PORT}:80 \
-	-e PMA_HOST=${NAME}-db \
-	--restart unless-stopped \
-	phpmyadmin/phpmyadmin:latest
 
 docker network connect ${NAME} ${PROXY_MANAGER}
 docker ps | awk '{print $NF}' | grep "^${PROXY_MANAGER}$" > /dev/null 2>&1 && docker restart ${PROXY_MANAGER}
