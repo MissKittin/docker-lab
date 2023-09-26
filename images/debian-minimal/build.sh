@@ -103,7 +103,7 @@ find ./usr/share/python -type f -name *.pyc | xargs rm
 find ./usr/share/pixmaps -type f -or -type l | xargs rm
 
 # remove C headers
-#rm -r -f ./usr/includes/*
+rm -r -f ./usr/includes/*
 
 # purge fdisk
 for i in $(ls ./sbin/*fdisk | xargs) ./usr/share/doc/fdisk/copyright; do
@@ -111,8 +111,10 @@ for i in $(ls ./sbin/*fdisk | xargs) ./usr/share/doc/fdisk/copyright; do
 done
 
 # purge startpar
-#echo -n '' > ./lib/startpar/startpar
-#echo -n '' > ./usr/share/doc/startpar/copyright
+if [ -e './lib/startpar/startpar' ]; then
+	echo -n '' > ./lib/startpar/startpar
+	echo -n '' > ./usr/share/doc/startpar/copyright
+fi
 
 # remove apt lists
 for i in ./var/lib/apt/lists/*; do

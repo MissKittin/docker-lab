@@ -1,11 +1,11 @@
 #!/bin/sh
 NAME='joomla'
 PROXY_MANAGER='nginx-proxy-manager'
-PMA_PORT='9003'
 
 [ ! "${1}" = '' ] && NAME="${1}"
 [ ! "${2}" = '' ] && PROXY_MANAGER="${2}"
-er ps -a | awk '{print $NF}' | grep "^${PROXY_MANAGER}$" > /dev/null 2>&1
+
+if ! docker ps -a | awk '{print $NF}' | grep "^${PROXY_MANAGER}$" > /dev/null 2>&1; then
 	echo "Container ${PROXY_MANAGER} not exists"
 	echo 'Continue? (y/N) '
 	read answer
@@ -37,14 +37,6 @@ docker run -d \
 	-e JOOMLA_DB_NAME=joomla \
 	--restart unless-stopped \
 	joomla
-
-docker run -d \
-	--name=${NAME}-pma \
-	--network ${NAME} \
-	-p 127.0.0.1:${PMA_PORT}:80 \
-	-e PMA_HOST=${NAME}-db \
-	--restart unless-stopped \
-	phpmyadmin/phpmyadmin:latest
 
 docker volume create ${NAME}-redis_data
 docker run -d \
