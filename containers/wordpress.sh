@@ -30,7 +30,7 @@ docker run -d \
 	--name=${NAME}-db \
 	--network ${NAME} \
 	-v ${NAME}-db_data:/var/lib/mysql \
-	-e MYSQL_ROOT_PASSWORD=mysqlroot \
+	-e MYSQL_RANDOM_ROOT_PASSWORD=yes \
 	-e MYSQL_DATABASE=wordpress \
 	-e MYSQL_USER=wordpress \
 	-e MYSQL_PASSWORD=wordpress \
