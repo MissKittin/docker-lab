@@ -22,7 +22,6 @@ docker run --rm -it \
 	--network ${NAME} \
 	-p 127.0.0.1:${PMA_PORT}:80 \
 	-e PMA_HOST=${NAME}-db \
-	--restart unless-stopped \
 	phpmyadmin/phpmyadmin:latest
 
 exit 0
