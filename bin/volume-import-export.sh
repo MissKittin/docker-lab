@@ -1,5 +1,19 @@
 #!/bin/sh
 
+if [ ! "$(whoami)" = 'root' ] && ! groups | grep -qw 'docker'; then
+	echo 'No superuser'
+	exit 1
+fi
+
+if ! command -v 'docker"' > /dev/null 2>&1; then
+	echo 'docker is not installed'
+	exit 1
+fi
+
+if [ ! "${2}" = '' ]; then
+	cd "${2}" || exit 1
+fi
+
 case "${1}" in
 	'import')
 		for volume in *; do
@@ -9,7 +23,7 @@ case "${1}" in
 			docker run --rm \
 				-v $(pwd):/backup \
 				-v ${volume}:/content \
-				busybox \
+				busybox:stable-uclibc \
 				tar xvf /backup/${volume}
 		done
 	;;
@@ -23,7 +37,7 @@ case "${1}" in
 		done
 	;;
 	*)
-		echo "${0} import|export"
+		echo "${0} import|export [path/to/directory]"
 		exit 1
 	;;
 esac
