@@ -1,7 +1,6 @@
 # Docker lab
 Several scripts that run temporary containers
 
-### Containers
 * `joomla-pma.sh` - joomla database editor
 * `php-cli.sh` - for testing PHP apps
 * `portainer.sh` - docker GUI

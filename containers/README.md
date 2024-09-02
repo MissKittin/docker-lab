@@ -1,7 +1,6 @@
 # Docker lab
 Several scripts that install containers
 
-### Containers
 * `nginx-proxy-manager.sh` - main http server (install it first)
 * `joomla.sh` - joomla installer (mysql, joomla, redis)
 * `portainer.sh` - docker GUI
