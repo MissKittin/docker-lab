@@ -1,8 +1,8 @@
 #!/bin/sh
 
 if [ ! "$(whoami)" = 'root' ] && ! groups | grep -qw 'docker'; then
-	sudo "${0}" "${1}" "${2}"
-	exit "${?}"
+	echo 'No superuser'
+	exit 1
 fi
 
 if [ "${1}" = '' ] || [ "${1}" = '-h' ] || [ "${1}" = '--help' ]; then

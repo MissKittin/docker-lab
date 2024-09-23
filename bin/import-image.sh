@@ -1,7 +1,7 @@
 #!/bin/sh
 
 if [ ! "$(whoami)" = 'root' ] && ! groups | grep -qw 'docker'; then
-	echo "No superuser"
+	echo 'No superuser'
 	exit 1
 fi
 
